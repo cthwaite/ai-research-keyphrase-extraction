@@ -29,7 +29,7 @@ def extract_keyphrases(emdist, ptagger, raw_text, N, lang, beta=0.55, alias_thre
             3)list containing for each keyphrase a list of alias (list of list of string)
     '''
     tagged = ptagger.pos_tag_raw_text(raw_text)
-    text_obj = InputTextObj(tagged, lang)
+    text_obj = InputTextObj(tagged)
     return MMRPhrase(emdist, text_obj, N=N, beta=beta, alias_threshold=alias_threshold)
 
 

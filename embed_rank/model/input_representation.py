@@ -10,7 +10,7 @@ class InputTextObj:
     '''Represent the input text from which we want to extract keyphrases.
     '''
 
-    def __init__(self, pos_tagged, lang, stem=False, min_word_len=3):
+    def __init__(self, pos_tagged, stem=False, min_word_len=3):
         '''
         Args:
             pos_tagged (list): List of list : Text pos_tagged as a list of sentences
@@ -23,7 +23,6 @@ class InputTextObj:
         self.pos_tagged = []
         self.filtered_pos_tagged = []
         self.isStemmed = stem
-        self.lang = lang
 
         if stem:
             stemmer = PorterStemmer()
