@@ -31,35 +31,38 @@ class InputTextObj:
 
         temp = []
         for sent in self.pos_tagged:
-            s = []
+            sent_list = []
             for elem in sent:
                 if len(elem[0]) < min_word_len:
-                    s.append((elem[0], 'LESS'))
+                    sent_list.append((elem[0], 'LESS'))
                 else:
-                    s.append(elem)
-            temp.append(s)
+                    sent_list.append(elem)
+            temp.append(sent_list)
 
         self.pos_tagged = temp
         self.filtered_pos_tagged = [[(t[0].lower(), t[1]) for t in sent if self.is_candidate(t)] for sent in
                                     self.pos_tagged]
 
     def is_candidate(self, tagged_token):
-        '''
+        '''Check if a token represents a valid candidate word.
 
         Args:
             tagged_token (tuple): (word, tag)
+
         Returns:
             True if the passed token is a valid candidate word.
         '''
         return tagged_token[1] in self.considered_tags
 
     def extract_candidates(self):
-        '''
+        '''Extract candidate tokens from wrapped text.
+
         Returns:
             set: All candidate words.
         '''
-        return {tagged_token[0].lower()
-                for sentence in self.pos_tagged
-                for tagged_token in sentence
-                if self.is_candidate(tagged_token) and len(tagged_token[0]) >= self.min_word_len
-                }
+        return {
+            tagged_token[0].lower()
+            for sentence in self.pos_tagged for tagged_token in sentence
+            if self.is_candidate(tagged_token)
+                and len(tagged_token[0]) >= self.min_word_len
+        }
