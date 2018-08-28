@@ -3,8 +3,6 @@
 #
 #Authors: Kamil Bennani-Smires, Yann Savary
 
-import numpy as np
-
 import sent2vec
 
 from .emb_distrib_interface import EmbeddingDistributor
