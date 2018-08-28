@@ -11,11 +11,12 @@ def process_tagged_text(s):
     of tuples in the form (word, tag).
 
     Args:
-        s (str): `tagged_text` coming from solr word1|tag1 word2|tag2[ENDSENT]word3|tag3 ...
-    Returns:
-        list of list of tuple: List of sentences where each sentence is a list of tuple (word,tag)
-    '''
+        s (str): `tagged_text` coming from solr.
 
+    Returns:
+        list: List of sentences where each sentence is a list of tuples in the
+            form (word, tag).
+    '''
     def str2tuple(tagged_token_text, sep='|'):
         loc = tagged_token_text.rfind(sep)
         if loc >= 0:

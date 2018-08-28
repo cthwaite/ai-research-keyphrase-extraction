@@ -7,7 +7,8 @@ from nltk.stem import PorterStemmer
 
 
 class InputTextObj:
-    '''Represent the input text in which we want to extract keyphrases'''
+    '''Represent the input text from which we want to extract keyphrases.
+    '''
 
     def __init__(self, pos_tagged, lang, stem=False, min_word_len=3):
         '''

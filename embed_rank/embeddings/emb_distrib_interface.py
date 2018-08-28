@@ -20,10 +20,11 @@ class EmbeddingDistributor(ABC):
     '''
     @abstractmethod
     def get_tokenized_sents_embeddings(self, sents):
-        '''
-        Generate a numpy ndarray with the embedding of each element of sent in each row
+        '''Generate a numpy ndarray with the embedding of each element of sent in each row.
+
         Args:
             sents (list): list of string (sentences/phrases)
+
         Returns:
             ndarray: with shape (len(sents), dimension of embeddings)
         '''

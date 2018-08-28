@@ -100,14 +100,15 @@ def MMRPhrase(embdistrib, text_obj, beta=0.65, N=10, use_filtered=True, alias_th
 def MMRSent(embdistrib, text_obj, beta=0.5, N=10, use_filtered=True):
     '''
 
-    Extract N key sentences
+    Args:
+        embdistrib (EmbeddingDistributor)
+        text_obj (InputTextObj)
+        beta (float): beta hyperparameter for MMR
+        N (int): number of key sentences to extract
+        use_filtered (bool, optional): if true filter the text by keeping only candidate word before computing the doc embedding
 
-    :param embdistrib: embedding distributor see @EmbeddingDistributor
-    :param text_obj: Input text representation see @InputTextObj
-    :param beta: hyperparameter beta for MMR (control tradeoff between informativeness and diversity)
-    :param N: number of key sentences to extract
-    :param use_filtered: if true filter the text by keeping only candidate word before computing the doc embedding
-    :return: list of N key sentences (or less if there are not enough candidates)
+    Returns:
+        list of N key sentences (or less if there are not enough candidates)
     '''
     candidates, X = extract_sent_candidates_embedding_for_doc(embdistrib, text_obj)
 

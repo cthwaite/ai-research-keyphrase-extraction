@@ -9,13 +9,15 @@ from .extractor import extract_candidates, extract_sent_candidates
 
 
 def extract_doc_embedding(embedding_distrib, inp_rpr, use_filtered=False):
-    '''
-    Return the embedding of the full document
+    '''Return the embedding of the full document.
 
-    :param embedding_distrib: embedding distributor see @EmbeddingDistributor
-    :param inp_rpr: input text representation see @InputTextObj
-    :param use_filtered: if true keep only candidate words in the raw text before computing the embedding
-    :return: numpy array of shape (1, dimension of embeddings) that contains the document embedding
+    Args:
+        embedding_distrib: embedding distributor see @EmbeddingDistributor
+        inp_rpr: input text representation see @InputTextObj
+        use_filtered: if true keep only candidate words in the raw text before computing the embedding
+
+    Returns:
+        numpy array of shape (1, dimension of embeddings) that contains the document embedding
     '''
     if use_filtered:
         tagged = inp_rpr.filtered_pos_tagged
@@ -27,17 +29,21 @@ def extract_doc_embedding(embedding_distrib, inp_rpr, use_filtered=False):
 
 
 def extract_candidates_embedding_for_doc(embedding_distrib, inp_rpr):
-    '''
+    '''Return the list of candidate phrases as well as the associated numpy
+    array that contains their embeddings.
 
-    Return the list of candidate phrases as well as the associated numpy array that contains their embeddings.
-    Note that candidates phrases extracted by PosTag rules  which are uknown (in term of embeddings)
-    will be removed from the candidates.
+    Note that candidate phrases extracted by PosTag rules which are unknown
+    (in term of embeddings) will be removed from the candidates.
 
-    :param embedding_distrib: embedding distributor see @EmbeddingDistributor
-    :param inp_rpr: input text representation see @InputTextObj
-    :return: A tuple of two element containing 1) the list of candidate phrases
-    2) a numpy array of shape (number of candidate phrases, dimension of embeddings :
-    each row is the embedding of one candidate phrase
+    Args:
+        embedding_distrib: embedding distributor see @EmbeddingDistributor
+        inp_rpr: input text representation see @InputTextObj
+
+    Returns:
+        A tuple of two element containing
+            1) the list of candidate phrases
+            2) a numpy array of shape (number of candidate phrases, dimension
+                of embeddings: each row is the embedding of one candidate phrase
     '''
     candidates = np.array(extract_candidates(inp_rpr))  # List of candidates based on PosTag rules
     if len(candidates) > 0:
@@ -49,14 +55,20 @@ def extract_candidates_embedding_for_doc(embedding_distrib, inp_rpr):
 
 
 def extract_sent_candidates_embedding_for_doc(embedding_distrib, inp_rpr):
-    '''
-    Return the list of candidate senetences as well as the associated numpy array that contains their embeddings.
-    Note that candidates sentences which are uknown (in term of embeddings) will be removed from the candidates.
+    '''Returns the list of candidate senetences as well as the associated numpy
+    array that contains their embeddings.
+    
+    Note that candidate sentences which are unknown (in term of embeddings)
+    will be removed from the candidates.
 
-    :param embedding_distrib: embedding distributor see @EmbeddingDistributor
-    :param inp_rpr: input text representation see @InputTextObj
-    :return: A tuple of two element containing 1) the list of candidate sentences
-    2) a numpy array of shape (number of candidate sentences, dimension of embeddings :
+    Args:
+        embedding_distrib: embedding distributor see @EmbeddingDistributor
+        inp_rpr: input text representation see @InputTextObj
+
+    Returns:
+        A tuple of two element containing
+            1) The list of candidate sentences
+            2) A numpy array of shape (candidate sentences, embedding dimension);
     each row is the embedding of one candidate sentence
     '''
     candidates = np.array(extract_sent_candidates(inp_rpr))

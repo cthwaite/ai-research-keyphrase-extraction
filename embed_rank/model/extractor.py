@@ -50,7 +50,8 @@ def extract_sent_candidates(text_obj):
     '''
 
     Args:
-        text_obj: input Text Representation see @InputTextObj
+        text_obj (InputTextObj): input text
+    
     Returns:
         list: List of tokenized sentence (string), each token is separated by
             a space in the string.

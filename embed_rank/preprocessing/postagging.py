@@ -14,10 +14,13 @@ from ..util.fileIO import read_file, write_string
 
 
 class PosTagging:
-    '''Concrete class of PosTagging using StanfordPOSTokenizer and StanfordPOSTagger
+    '''Parts-of-speech tagging using spaCy.
     '''
     def __init__(self, nlp=None, model='en_core_web_sm'):
         '''
+        Args:
+            nlp
+            model (str): spaCy model to load.
         '''
         if not nlp:
             print('Loading Spacy model')
@@ -74,18 +77,15 @@ class PosTagging:
 
 
     def pos_tag_file(self, input_path, output_path=None):
-        '''POS Tag a file.
-        Either we have a list of lists (for each sentence a list of tuple (word,tag)),
-        or a file with the POS tagged text.
+        '''Tokenize and POS tag a file.
 
-        Note : The jumpline is only for readibility purpose , when reading a
-        tagged file we'll use again `sent_tokenize` to find the sentence
-        boundaries.
+        Note: The jumpline is only for readibility purposes; when reading a
+        tagged file we use `sent_tokenize` to find the sentence boundaries.
 
         Args:
             input_path (str): path of the source file
             output_path (str, optional): If set, write POS tagged text with
-                separators. If not set, return list of list of tuple.
+                separators. If not set, return list of list of tuples.
 
         Returns:
             list: Resulting POS tagged text as a list of list of tuple.
@@ -122,7 +122,7 @@ class PosTagging:
             if os.path.isfile(path):
                 self.pos_tag_file(path, output_file_path)
             else:
-                warnings.warn('file ' + output_file_path + 'does not exists')
+                warnings.warn(f'File {output_file_path} does not exist')
 
 
 
