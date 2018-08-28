@@ -8,26 +8,31 @@ import warnings
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from swisscom_ai.research_keyphrase.model.methods_embeddings import extract_candidates_embedding_for_doc, \
-    extract_doc_embedding, extract_sent_candidates_embedding_for_doc
+from .methods_embeddings import (extract_candidates_embedding_for_doc,
+                                 extract_doc_embedding,
+                                 extract_sent_candidates_embedding_for_doc)
 
 
 def _MMR(embdistrib, text_obj, candidates, X, beta, N, use_filtered, alias_threshold):
-    """
-    Core method using Maximal Marginal Relevance in charge to return the top-N candidates
+    '''Core method using Maximal Marginal Relevance in charge to return the
+    top-N candidates.
 
-    :param embdistrib: embdistrib: embedding distributor see @EmbeddingDistributor
-    :param text_obj: Input text representation see @InputTextObj
-    :param candidates: list of candidates (string)
-    :param X: numpy array with the embedding of each candidate in each row
-    :param beta: hyperparameter beta for MMR (control tradeoff between informativeness and diversity)
-    :param N: number of candidates to extract
-    :param use_filtered: if true filter the text by keeping only candidate word before computing the doc embedding
-    :return: A tuple with 3 elements :
-    1)list of the top-N candidates (or less if there are not enough candidates) (list of string)
-    2)list of associated relevance scores (list of float)
-    3)list containing for each keyphrase a list of alias (list of list of string)
-    """
+    Args:
+        embdistrib: embdistrib: embedding distributor see @EmbeddingDistributor
+        text_obj (): Input text representation see @InputTextObj
+        candidates (list): list of candidates (string)
+        X (ndarray): numpy array with the embedding of each candidate in each row
+        beta (float): hyperparameter beta for MMR (control tradeoff between informativeness and diversity)
+        N (int): number of candidates to extract
+        use_filtered (bool): if true filter the text by keeping only candidate word before computing the doc embedding
+        alias_threshold
+
+    Returns:
+        A tuple with 3 elements :
+        1)list of the top-N candidates (or less if there are not enough candidates) (list of string)
+        2)list of associated relevance scores (list of float)
+        3)list containing for each keyphrase a list of alias (list of list of string)
+    '''
 
     N = min(N, len(candidates))
     doc_embedd = extract_doc_embedding(embdistrib, text_obj, use_filtered)  # Extract doc embedding
@@ -71,8 +76,7 @@ def _MMR(embdistrib, text_obj, candidates, X, beta, N, use_filtered, alias_thres
 
 
 def MMRPhrase(embdistrib, text_obj, beta=0.65, N=10, use_filtered=True, alias_threshold=0.8):
-    """
-    Extract N keyphrases
+    '''Extract N keyphrases.
 
     :param embdistrib: embedding distributor see @EmbeddingDistributor
     :param text_obj: Input text representation see @InputTextObj
@@ -83,7 +87,7 @@ def MMRPhrase(embdistrib, text_obj, beta=0.65, N=10, use_filtered=True, alias_th
     1)list of the top-N candidates (or less if there are not enough candidates) (list of string)
     2)list of associated relevance scores (list of float)
     3)list containing for each keyphrase a list of alias (list of list of string)
-    """
+    '''
     candidates, X = extract_candidates_embedding_for_doc(embdistrib, text_obj)
 
     if len(candidates) == 0:
@@ -94,7 +98,7 @@ def MMRPhrase(embdistrib, text_obj, beta=0.65, N=10, use_filtered=True, alias_th
 
 
 def MMRSent(embdistrib, text_obj, beta=0.5, N=10, use_filtered=True):
-    """
+    '''
 
     Extract N key sentences
 
@@ -104,7 +108,7 @@ def MMRSent(embdistrib, text_obj, beta=0.5, N=10, use_filtered=True):
     :param N: number of key sentences to extract
     :param use_filtered: if true filter the text by keeping only candidate word before computing the doc embedding
     :return: list of N key sentences (or less if there are not enough candidates)
-    """
+    '''
     candidates, X = extract_sent_candidates_embedding_for_doc(embdistrib, text_obj)
 
     if len(candidates) == 0:
@@ -115,24 +119,30 @@ def MMRSent(embdistrib, text_obj, beta=0.5, N=10, use_filtered=True):
 
 
 def max_normalization(array):
-    """
-    Compute maximum normalization (max is set to 1) of the array
-    :param array: 1-d array
-    :return: 1-d array max- normalized : each value is multiplied by 1/max value
-    """
+    '''Compute maximum normalization (max is set to 1) of the array.
+        
+    Args:
+        array: 1-d array
+    
+    Returns:
+        1-d array max- normalized : each value is multiplied by 1/max value
+    '''
     return 1/np.max(array) * array.squeeze(axis=1)
 
 
 def get_aliases(kp_sim_between, candidates, threshold):
-    """
-    Find candidates which are very similar to the keyphrases (aliases)
-    :param kp_sim_between: ndarray of shape (nb_kp , nb candidates) containing the similarity
-    of each kp with all the candidates. Note that the similarity between the keyphrase and itself should be set to
-    NaN or 0
-    :param candidates: array of candidates (array of string)
-    :return: list containing for each keyphrase a list that contain candidates which are aliases
-    (very similar) (list of list of string)
-    """
+    '''Find candidates which are very similar to the keyphrases (aliases).
+
+    Args:
+        kp_sim_between: ndarray of shape (nb_kp , nb candidates) containing the
+            similarity of each keyphrase with all the candidates. Note that the
+            similarity between the keyphrase and itself should be set to NaN or 0.
+        candidates: array of candidates (array of string)
+
+    Returns:
+        list containing for each keyphrase a list that contain candidates which are aliases
+        (very similar) (list of list of string)
+    '''
 
     kp_sim_between = np.nan_to_num(kp_sim_between, 0)
     idx_sorted = np.flip(np.argsort(kp_sim_between), 1)
