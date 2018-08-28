@@ -1,7 +1,5 @@
-[STANFORDTAGGER]
-jar_path =
-model_directory_path =
-
 [SENT2VEC]
 model_path =
-model_path_de =
+
+[SPACY]
+model =
