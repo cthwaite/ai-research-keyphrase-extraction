@@ -1,5 +1,3 @@
-This is the implementation of the following paper: https://arxiv.org/abs/1801.04470
-
 # Installation
 
 ## Local Installation
@@ -7,37 +5,34 @@ This is the implementation of the following paper: https://arxiv.org/abs/1801.04
 1. Download full Stanford Tagger version 3.8.0
 https://nlp.stanford.edu/software/tagger.shtml
 
-2. Install sent2vec from 
+2. Install sent2vec from
 https://github.com/epfml/sent2vec
     * Clone/Download the directory
     * go to sent2vec directory and make
     * pip install cython
-    * inside the src folder 
+    * inside the src folder
         * ``python setup.py build_ext``
         * ``pip install . ``
-        * (In OSX) If the setup.py throws an **error** (ignore warnings), open setup.py and add '-stdlib=libc++' in the compile_opts list.        
+        * (In OSX) If the setup.py throws an **error** (ignore warnings), open setup.py and add '-stdlib=libc++' in the compile_opts list.
     * Download a pre-trained model (see readme of Sent2Vec repo) , for example wiki_bigrams.bin
-     
+
 3. Install requirements
-    
+
     After cloning this repository go to the root directory and
     ``pip -r requirements.txt``
 
 4. Download NLTK data
 ```
-import nltk 
+import nltk
 nltk.download('punkt')
 ```
 
-5. Set the paths in config.ini.template
-    
-    * For [STANFORDTAGGER] :
-        * set jar_path to your_stanford_path/stanford-postagger.jar
-        * set model_directory_path to your_stanford_path/models
+5. Copy config.ini.template -> config.ini and set:
+
+    * For [SPACY]:
+        * Set `model` to the model you wish to use, e.g. `en_core_web_sm`
     * For [SENT2VEC]:
-        * set your model_path to the pretrained model
-        your_path_to_model/wiki_bigrams.bin (if you choosed wiki_bigrams.bin)
-    * rename config.ini.template to config.ini
+        * Set your model_path to the pretrained model, e.g. `./model/wiki_bigrams.bin`
 
 ## Docker
 
@@ -77,7 +72,7 @@ If you have several documents in which you want to extract keyphrases the previo
 it will load the embedding model and the part of speech tagger each time. If you have several documents it is better to
 load the embedding model and the part of speech tagger once :
 
-```
+```python
 import launch
 
 embedding_distributor = launch.load_local_embedding_distributor('en')
@@ -107,13 +102,11 @@ N candidates are selected as keyphrases by using Maximal Margin Relevance using 
 document in order to model the informativness and the cosine
 similarity between the candidates is used to model the diversity.
 
-An hyperparameter, beta (default=0.55), controls the importance given to 
+An hyperparameter, beta (default=0.55), controls the importance given to
 informativness and diversity when extracting keyphrases.
 (beta = 1 only informativness , beta = 0 only diversity)
 You can change the beta hyperparameter value when calling extract_keyphrases:
 
-```
+```python
 kp1 = launch.extract_keyphrases(embedding_distributor, pos_tagger, raw_text, 10, 'en', beta=0.8)  #extract 10 keyphrases with beta=0.8
-
 ```
-
