@@ -22,7 +22,6 @@ class InputTextObj:
         self.considered_tags = {'NN', 'NNS', 'NNP', 'NNPS', 'JJ'}
         self.pos_tagged = []
         self.filtered_pos_tagged = []
-        self.isStemmed = stem
 
         if stem:
             stemmer = PorterStemmer()
